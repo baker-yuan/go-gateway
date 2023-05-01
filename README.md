@@ -50,6 +50,24 @@ https://pkg.go.dev/github.com/valyala/fasthttp
 
 
 
+## httprouter
+
+> https://github.com/julienschmidt/httprouter
+>
+> chatGPT：
+> httprouter是一个轻量级的Go语言HTTP请求路由器，它能够高效地处理HTTP请求，并支持RESTful API的设计。它的主要特点包括：
+> 1. 高性能：httprouter使用了trie树的算法来实现路由匹配，比常规的正则表达式匹配更快。
+> 2. 简单易用：httprouter的API非常简单，只需要调用一个函数并传入路由和处理函数即可。
+> 3. 支持RESTful API：httprouter支持HTTP请求的GET、POST、PUT、DELETE等RESTful API，可以快速地设计和开发RESTful API。
+> 4. 支持中间件：httprouter支持中间件，可以在路由处理函数之前或之后执行一些自定义的逻辑。
+> 5. 可扩展性强：httprouter的代码非常简洁，易于扩展和修改，可以根据实际需求进行定制化开发。
+>
+> 总之，httprouter是一个简单、高效、易用、可扩展的Go语言HTTP请求路由器，非常适合用于构建高性能的Web应用程序和RESTful API。
+
+> 文章：http://www.baker-yuan.cn/articles/322
+
+
+
 ## kratos
 
 > Kratos 一套轻量级 Go 微服务框架，包含大量微服务相关功能及工具。
