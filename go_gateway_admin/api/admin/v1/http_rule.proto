@@ -1,0 +1,124 @@
+syntax = "proto3";
+
+package admin.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/baker-yuan/go-gateway/go-gateway-admin/api/admin/v1;v1";
+
+// 接口协议
+enum InterfaceType {
+  UNKNOWN = 0;  // 未知
+  HTTP = 1;     // http
+  HTTP_S = 2;   // https
+  G_RPC = 3;    // grpc
+  DOUBLE = 4;   // double
+}
+
+// 接口状态
+enum Status {
+  DEFAULT = 0;  // 默认
+  Online = 1;   // 上线
+  Offline = 2;  // 下线
+}
+
+// 网关接口映射信息
+message HttpRule {
+  optional uint32 id = 1;                    // ID
+  optional string gw_url = 2;                // 网关接口
+  optional string http_type = 3;             // 接口类型 net/http/method.go
+  optional string application = 4;           // 应用名称
+  optional InterfaceType interface_type = 5; // 接口协议
+  optional string config = 6;                // 指定协议的配置
+  optional string interface_url = 7;         // 接口方法
+  optional Status status = 8;                // 接口状态
+  optional uint32 create_time = 9;           // 创建时间
+  optional uint32 update_time = 10;          // 修改时间
+}
+
+// http配置
+message HttpConfig {
+}
+
+// grpc配置
+message GrpcConfig {
+  // 调用grpc接口的方式
+  enum GrpcCallType {
+    DEFAULT = 0;    // 默认
+    JSON = 1;       // grpc支持json编码
+    REFLECTION = 2; // grpc开启反射 reflection.Register(s)
+    PROTO = 3;      // proto文件
+  }
+  optional GrpcCallType callType = 1; // 调用grpc接口的方式
+  optional string proto = 2;          // proto文件
+}
+
+
+// 网关接口映射信息
+service GatewayAdmin {
+  // 获取所有接口
+  rpc ListHttpRule(ListHttpRuleReq) returns (HttpRulesRsp) {
+    option (google.api.http) = {
+      get: "/admin/httpRules"
+    };
+  }
+  // 添加接口
+  rpc AddHttpRule(HttpRule) returns (HttpRuleRsp) {
+    option (google.api.http) = {
+      post: "/admin/httpRules",
+      body: "*"
+    };
+  }
+  // 删除接口
+  rpc DeleteHttpRule(DeleteHttpRuleReq) returns (HttpRuleRsp) {
+    option (google.api.http) = {
+      delete: "/admin/httpRules/:id"
+    };
+  }
+  // 修改接口
+  rpc UpdateHttpRule(HttpRule) returns (HttpRuleRsp) {
+    option (google.api.http) = {
+      put: "/admin/httpRules/:id",
+      body: "*"
+    };
+  }
+
+}
+
+// 搜索
+message ListHttpRuleReq {
+  optional uint32 id = 1;                    // ID
+  optional string gw_url = 2;                // 网关接口
+  optional string http_type = 3;             // 接口类型 net/http/method.go
+  optional string application = 4;           // 应用名称
+  optional InterfaceType interface_type = 5; // 接口协议
+  optional string config = 6;                // 指定协议的配置
+  optional string interface_url = 7;         // 接口方法
+  optional Status status = 8;                // 接口状态
+  optional uint32 create_time = 9;           // 创建时间
+  optional uint32 update_time = 10;          // 修改时间
+
+  optional uint32 page = 100;
+  optional uint32 page_size = 101;
+}
+
+message DeleteHttpRuleReq {
+  optional uint32 id = 1; // ID
+}
+
+message HttpRulesRsp {
+  optional uint32 code = 1;
+  optional uint32 message = 2;
+  repeated HttpRule rules = 3;
+  optional uint32 total = 4;
+}
+
+message HttpRuleRsp {
+  optional uint32 code = 1;
+  optional uint32 message = 2;
+  optional HttpRule rule = 3;
+}
+
+
+
+
