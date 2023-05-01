@@ -21,7 +21,7 @@
 >
 > 2、案例：https://github.com/eolinker/apinto/blob/v0.12.5/drivers/plugins/http-to-gRPC/complete.go
 
-# 三方工具
+# 用到的框架
 
 ## grpcurl
 
@@ -106,7 +106,7 @@ https://pkg.go.dev/github.com/valyala/fasthttp
 
 ## Apache ShenYu
 
-> 这是一个异步的，高性能的，跨语言的，响应式的 `API` 网关。
+> 这是一个异步的，高性能的，跨语言的，响应式的 `API` 网关。基于Java实现，文档丰富，值得推荐。
 >
 > https://github.com/apache/shenyu
 
@@ -128,6 +128,28 @@ https://pkg.go.dev/github.com/valyala/fasthttp
 > - https://community.apinto.com/d/34044-gokuapinto
 
 EOLINKER 旗下的微服务网关，都有对应的商业版本。开源版本感觉抠抠搜搜的。
+
+
+
+# 学习资料
+
+## 【小傅哥】API网关：中间件设计和实践
+
+> https://wx.zsxq.com/dweb2/index/topic_detail/184422812115512
+
+## Vue+Go 开发企业级微服务网关项目
+
+> 本课程带你手把手设计并实现一个通用型前端+后端一体的微服务网关项目，同时利用Go语言本身的性能优势，打造网关的优越性能，提升自身硬实力，还能收获微服务网关项目作品，丰富个人简历。
+>
+> https://coding.imooc.com/class/436.html
+
+## Netty+Nacos+Disruptor自研企业级API网关
+
+> 大部分一线开发人员自研开发能力都比较薄弱，导致难进大厂或晋升受阻，进而阻碍了个人的职业发展。为此，慕课网重磅推出自研网关课程，课程将带你系统掌握自研网关的完整流程，并手把手实践与落地整套方法论，助力你成为自研组件高手，过程中综合运用“三高”主流技术栈，全面提升高阶技能，突破职业发展瓶颈。
+>
+> https://coding.imooc.com/class/655.html
+
+
 
 # 项目截图
 
