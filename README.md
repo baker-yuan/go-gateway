@@ -1,5 +1,9 @@
 # 基于go实现分布式网关
 
+# ❓为啥要做这个系统
+
+后端是`gRPC`接口，前端是通过`htttp`的方式。为了能够让前端通过http方式调用，不得不使用`gin`或者`gRPC-Gateway`暴露一个`http`的接口，这种方式`太麻烦了`，也太`重复`了。通过`go网关`就可以实现`gRPC泛化调用`，后端只需要维护gRPC接口即可，网关负责协议转发。
+
 # grpc泛化调用方式
 
 ## grpc服务直接支持json编码
@@ -93,6 +97,12 @@ https://pkg.go.dev/github.com/valyala/fasthttp
 > https://github.com/polarismesh/polaris
 
 
+
+## vue-manage-system
+
+> 该方案作为一套多功能的后台框架模板，适用于绝大部分的后台管理系统开发。基于 Vue3 + pinia + typescript，引用 Element Plus 组件库，方便开发。实现逻辑简单，适合外包项目，快速交付。
+>
+> https://github.com/lin-xin/vue-manage-system
 
 # 开源网关推荐
 
