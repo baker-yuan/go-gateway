@@ -113,15 +113,21 @@ interface TableItem {
   interfaceUrl: string;
 }
 
+// 表单引用
 const formRef = ref<FormInstance>();
 
+// 表格数据
+const tableData = ref<TableItem[]>([]);
+// 种页数
+const pageTotal = ref(0);
+
+// 查询参数
 const query = reactive({
   interfaceType: '',
   pageIndex: 1,
   pageSize: 10
 });
-const tableData = ref<TableItem[]>([]);
-const pageTotal = ref(0);
+
 // 获取表格数据
 const getData = () => {
   gatewayHttpRuleData(query).then(res => {
@@ -151,10 +157,14 @@ const handleDelete = (index: number) => {
   })
     .then(() => {
       ElMessage.success('删除成功');
+      // 删除本地table数据
       tableData.value.splice(index, 1);
+      // 调用接口删除
+
     })
     .catch(() => {});
 };
+
 
 // 表格编辑时弹窗和保存
 const addOrEditVisible = ref(false);
@@ -177,37 +187,53 @@ const handleEdit = (index: number, row: any) => {
   form.interfaceUrl = row.interfaceUrl;
   addOrEditVisible.value = true;
 };
+
+// 修改或者保存
+const saveOrUpdateData = () => {
+  // gatewayHttpRuleData(query).then(res => {
+  //   tableData.value = res.data.rules;
+  //   pageTotal.value = res.data.total || 50;
+  // });
+};
+
+// 提交
 const saveOrUpdateEdit = () => {
-  addOrEditVisible.value = false;
-  ElMessage.success(`修改第 ${idx + 1} 行成功`);
-  tableData.value[idx].id = form.id;
-  tableData.value[idx].gwUrl = form.gwUrl;
-  tableData.value[idx].httpType = form.httpType;
-  tableData.value[idx].application = form.application;
-  tableData.value[idx].interfaceType = form.interfaceType;
-  tableData.value[idx].interfaceUrl = form.interfaceUrl;
+  if (form.id == 0) {
+
+  } else {
+
+  }
+  // addOrEditVisible.value = false;
+  // ElMessage.success(`修改第 ${idx + 1} 行成功`);
+  // tableData.value[idx].id = form.id;
+  // tableData.value[idx].gwUrl = form.gwUrl;
+  // tableData.value[idx].httpType = form.httpType;
+  // tableData.value[idx].application = form.application;
+  // tableData.value[idx].interfaceType = form.interfaceType;
+  // tableData.value[idx].interfaceUrl = form.interfaceUrl;
+  // saveOrUpdateData()
 };
 
 const handleAdd = (index: number, row: any) => {
-  idx = index;
-  tableData.value[idx] = {
-    id: 0,
-    gwUrl: "",
-    httpType: "",
-    application:"",
-    interfaceType: "",
-    interfaceUrl: ""
-  }
+  idx = -1;
+  // form.value = {
+  //   id: 0,
+  //   gwUrl: "",
+  //   httpType: "",
+  //   application:"",
+  //   interfaceType: "",
+  //   interfaceUrl: ""
+  // }
   addOrEditVisible.value = true;
 }
 
 // 重置
 const onReset = (formEl: FormInstance | undefined) => {
-  console.log('onReset start...', formEl)
-  addOrEditVisible.value = false
-  if (!formEl) return;
-  formEl.resetFields();
-  console.log('onReset success...')
+  // console.log('onReset start...', formEl)
+  // addOrEditVisible.value = false
+  // if (!formEl) return;
+  // formEl.resetFields();
+  // console.log('onReset success...')
 };
 
 </script>
