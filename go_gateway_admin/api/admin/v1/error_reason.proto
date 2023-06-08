@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package admin.v1;
-
-option go_package = "github.com/baker-yuan/go-gateway/go-gateway-admin/api/admin/v1;v1";
-
-enum ErrorReason {
-  GRPC_ONLY_SUPPORT_POST = 0; // grpc 只支持 http post
-}
