@@ -92,8 +92,8 @@ func (h *RequestHeader) reset(header *fasthttp.RequestHeader) {
 // --------------------
 
 // headerActionHandleFunc http header 暂存/重放
-// https://github.com/eolinker/apinto/pull/113
-// https://github.com/eolinker/apinto/pull/117
+// https://github.com/baker-yuan/go-gateway/pull/113
+// https://github.com/baker-yuan/go-gateway/pull/117
 //
 // 1、http 转发用了一个快捷方式来复制上游返回的response，就会导致在http协议下，转发完成后，在转发前对响应的header设置被覆盖，
 // 针对这种情况，我们将转发前的header操作添加到actions中，在转发完成后执行refresh进行重放。

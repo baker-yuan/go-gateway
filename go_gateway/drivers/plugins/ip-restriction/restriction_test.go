@@ -92,7 +92,7 @@ func TestDoRestriction(t *testing.T) {
 			// 127.0.0.1加入ip白名单列表
 			name: "limit_white",
 			config: &Config{
-				IPListType: "white",
+				IPListType: "black",
 				IPWhiteList: []string{
 					"127.0.0.1",
 				},

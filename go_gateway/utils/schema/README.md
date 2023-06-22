@@ -444,7 +444,7 @@ type Config struct {
 	Id          string
 	Name        string `json:"name"`
 	Driver      string `json:"driver"`
-    Target      RequireId   `json:"target" type:"requireid" skill: "github.com/eolinker/apinto/upstream.upstream.IUpstream"` 
+    Target      RequireId   `json:"target" type:"requireid" skill: "github.com/baker-yuan/go-gateway/upstream.upstream.IUpstream"`
 }
 ```
 
@@ -469,7 +469,7 @@ type Config struct {
         {
             "name": "target",
             "type": "require",
-            "skill": "github.com/eolinker/apinto/upstream.upstream.IUpstream"
+            "skill": "github.com/baker-yuan/go-gateway/upstream.upstream.IUpstream"
         }
     ]
 }

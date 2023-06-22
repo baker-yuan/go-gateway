@@ -5,6 +5,7 @@ type IRegister[T any] interface {
 	Get(name string) (T, bool)
 	Del(name string) (T, bool)
 }
+
 type Register[T any] struct {
 	Untyped[string, T]
 }

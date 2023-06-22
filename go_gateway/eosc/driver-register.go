@@ -19,7 +19,7 @@ type IExtenderDrivers interface {
 // 1、实现了IExtenderDriverRegister 用于注册插件
 // 2、实现了IExtenderDrivers 用于获取插件
 type ExtenderRegister struct {
-	data IRegister[IExtenderDriverFactory]
+	data IRegister[IExtenderDriverFactory] // key=插件名称 value=插件工厂
 }
 
 // RegisterExtenderDriver 注册插件

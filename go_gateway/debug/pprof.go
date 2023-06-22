@@ -2,8 +2,8 @@ package debug
 
 import (
 	"net/http"
-	// "github.com/eolinker/eosc/env"
-	// "github.com/eolinker/eosc/log"
+	// "github.com/baker-yuan/go-gateway/env"
+	// "github.com/baker-yuan/go-gateway/log"
 )
 
 var (

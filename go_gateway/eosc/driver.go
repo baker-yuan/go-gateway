@@ -28,6 +28,12 @@ type IExtenderDriver interface {
 	Create(id, name string, v interface{}, workers map[RequireId]IWorker) (IWorker, error)
 }
 
+const (
+	SettingModeReadonly SettingMode = iota
+	SettingModeSingleton
+	SettingModeBatch
+)
+
 type SettingMode int
 
 type ISetting interface {
