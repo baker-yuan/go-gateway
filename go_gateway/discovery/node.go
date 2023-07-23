@@ -21,15 +21,15 @@ const (
 )
 
 type INode interface {
-	IP() string
-	ID() string
-	Addr() string
-	Port() int
-	Status() NodeStatus
-	Last() time.Time
-	Up()
-	Down()
-	Leave()
+	IP() string         //
+	ID() string         //
+	Addr() string       // 返回节点地址
+	Port() int          //
+	Status() NodeStatus // 节点状态类型
+	Last() time.Time    //
+	Up()                // 将节点状态置为运行中
+	Down()              // 将节点状态置为不可用
+	Leave()             // 将节点状态置为离开
 }
 type _INodeStatusCheck interface {
 	status(status NodeStatus) NodeStatus

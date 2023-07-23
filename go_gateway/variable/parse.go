@@ -32,6 +32,7 @@ func newOrg(typ reflect.Type, variables eosc.IVariable) *org {
 	return &org{typ: typ, variables: variables}
 }
 
+// UnmarshalJSON 自定义结构体类型的反序列化过程
 func (o *org) UnmarshalJSON(bytes []byte) error {
 	var origin interface{}
 	err := json.Unmarshal(bytes, &origin)
