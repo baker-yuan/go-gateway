@@ -1,3 +1,4 @@
+
 # 转发服务配置
 proxy:
   http:
@@ -13,3 +14,7 @@ sync:
     endpoints:
       - 127.0.0.1:2379
     dial_timeout: 3000
+
+# 管理端配置
+admin:
+  addr: 127.0.0.1:8848

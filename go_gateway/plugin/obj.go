@@ -1,17 +1,17 @@
 package plugin_manager
 
 import (
-	router_pb "github.com/baker-yuan/go-gateway/pb/router"
+	pb_router "github.com/baker-yuan/go-gateway/pb/router"
 	gcontext "github.com/baker-yuan/go-gateway/pkg/context"
 )
 
 // PluginObj 对一个路由对应对插件集合进行封装
 type PluginObj struct {
 	fs   gcontext.Filters             // 拦截器
-	conf map[string]*router_pb.Plugin // 插件配置
+	conf map[string]*pb_router.Plugin // 插件配置
 }
 
-func NewPluginObj(filters gcontext.Filters, conf map[string]*router_pb.Plugin) *PluginObj {
+func NewPluginObj(filters gcontext.Filters, conf map[string]*pb_router.Plugin) *PluginObj {
 	obj := &PluginObj{
 		fs:   filters,
 		conf: conf,

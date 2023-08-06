@@ -26,6 +26,8 @@ type Engine struct {
 func New() (*Engine, error) {
 	engine := &Engine{}
 
+	// 远程拉取管理端数据
+
 	// 初始化配置
 	conf, err := config.Load()
 	if err != nil {
