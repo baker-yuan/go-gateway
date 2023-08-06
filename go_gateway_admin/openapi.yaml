@@ -3,191 +3,36 @@
 
 openapi: 3.0.3
 info:
-    title: GatewayAdmin API
-    description: 网关接口映射信息
+    title: Greeter API
+    description: The greeting service definition.
     version: 0.0.1
 paths:
-    /admin/httpRules:
+    /helloworld/{name}:
         get:
             tags:
-                - GatewayAdmin
-            description: 获取所有接口
-            operationId: GatewayAdmin_ListHttpRule
+                - Greeter
+            description: Sends a greeting
+            operationId: Greeter_SayHello
             parameters:
-                - name: id
-                  in: query
-                  schema:
-                    type: integer
-                    format: uint32
-                - name: gwUrl
-                  in: query
+                - name: name
+                  in: path
+                  required: true
                   schema:
                     type: string
-                - name: httpType
-                  in: query
-                  schema:
-                    type: string
-                - name: application
-                  in: query
-                  schema:
-                    type: string
-                - name: interfaceType
-                  in: query
-                  schema:
-                    type: integer
-                    format: enum
-                - name: config
-                  in: query
-                  schema:
-                    type: string
-                - name: interfaceUrl
-                  in: query
-                  schema:
-                    type: string
-                - name: status
-                  in: query
-                  schema:
-                    type: integer
-                    format: enum
-                - name: createTime
-                  in: query
-                  schema:
-                    type: integer
-                    format: uint32
-                - name: updateTime
-                  in: query
-                  schema:
-                    type: integer
-                    format: uint32
-                - name: page
-                  in: query
-                  schema:
-                    type: integer
-                    format: uint32
-                - name: pageSize
-                  in: query
-                  schema:
-                    type: integer
-                    format: uint32
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/admin.v1.HttpRulesRsp'
-        post:
-            tags:
-                - GatewayAdmin
-            description: 添加接口
-            operationId: GatewayAdmin_AddHttpRule
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/admin.v1.HttpRule'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/admin.v1.HttpRuleRsp'
-    /admin/httpRules/:id:
-        put:
-            tags:
-                - GatewayAdmin
-            description: 修改接口
-            operationId: GatewayAdmin_UpdateHttpRule
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/admin.v1.HttpRule'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/admin.v1.HttpRuleRsp'
-        delete:
-            tags:
-                - GatewayAdmin
-            description: 删除接口
-            operationId: GatewayAdmin_DeleteHttpRule
-            parameters:
-                - name: id
-                  in: query
-                  schema:
-                    type: integer
-                    format: uint32
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/admin.v1.HttpRuleRsp'
+                                $ref: '#/components/schemas/helloworld.v1.HelloReply'
 components:
     schemas:
-        admin.v1.HttpRule:
+        helloworld.v1.HelloReply:
             type: object
             properties:
-                id:
-                    type: integer
-                    format: uint32
-                gwUrl:
-                    type: string
-                httpType:
-                    type: string
-                application:
-                    type: string
-                interfaceType:
-                    type: integer
-                    format: enum
-                config:
-                    type: string
-                interfaceUrl:
-                    type: string
-                status:
-                    type: integer
-                    format: enum
-                createTime:
-                    type: integer
-                    format: uint32
-                updateTime:
-                    type: integer
-                    format: uint32
-            description: 网关接口映射信息
-        admin.v1.HttpRuleRsp:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: uint32
                 message:
-                    type: integer
-                    format: uint32
-                rule:
-                    $ref: '#/components/schemas/admin.v1.HttpRule'
-        admin.v1.HttpRulesRsp:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: uint32
-                message:
-                    type: integer
-                    format: uint32
-                rules:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/admin.v1.HttpRule'
-                total:
-                    type: integer
-                    format: uint32
+                    type: string
+            description: The response message containing the greetings
 tags:
-    - name: GatewayAdmin
+    - name: Greeter

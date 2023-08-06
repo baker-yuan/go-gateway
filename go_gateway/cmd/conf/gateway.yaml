@@ -1,0 +1,15 @@
+# 转发服务配置
+proxy:
+  http:
+    port: 8080
+    host: 127.0.0.1
+  grpc:
+    port: 81
+    host: 127.0.0.1
+
+# 数据同步配置
+sync:
+  etcd:
+    endpoints:
+      - 127.0.0.1:2379
+    dial_timeout: 3000

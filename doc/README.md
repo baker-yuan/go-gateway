@@ -54,11 +54,30 @@ CREATE TABLE `plugin`
 ## 3、路由
 
 ```bash
+CREATE TABLE `http_router`
+(
+    `id`                 int(10) unsigned    NOT NULL AUTO_INCREMENT COMMENT '路由ID',
+    `name`               varchar(62)         NOT NULL DEFAULT '' COMMENT '名称',
+    `description`        varchar(100)        NOT NULL DEFAULT '' COMMENT '描述',
+    `host`               varchar(62)         NOT NULL DEFAULT '' COMMENT '请求host',
+    `method`             varchar(100)        NOT NULL DEFAULT '' COMMENT '请求方式 GET、POST、PUT、PATCH、DELETE、HEAD、OPTIONS',
+    `location`           varchar(62)         NOT NULL DEFAULT '' COMMENT '客户端请求路径',
+    `rules`              varchar(2000)       NOT NULL DEFAULT '' COMMENT '参数类型 header、query、cookie',
+    `retry`              tinyint(4) UNSIGNED NOT NULL DEFAULT '0' COMMENT '超时重试次数',
+    `time_out`           tinyint(4) UNSIGNED NOT NULL DEFAULT '0' COMMENT '超时时间，当为0时不设置超时，单位：ms',
+    `plugin_names`       varchar(1000)       NOT NULL DEFAULT '' COMMENT '插件列表',
+    `plugin_template_id` int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT '插件模版ID',
+    `service_id`         int(10) UNSIGNED    NOT NULL DEFAULT '0' COMMENT '服务ID',
+    `disable`            tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否禁用路由 0-生效 1-禁用',
+    `creator`            varchar(62)         NOT NULL DEFAULT '' COMMENT '创建人',
+    `operator`           varchar(62)         NOT NULL DEFAULT '' COMMENT '更新人',
+    `created_at`         timestamp(3)        NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT '创建时间',
+    `updated_at`         timestamp(3)        NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+) DEFAULT CHARSET = utf8mb4 COMMENT 'http路由';
 ```
 
 
 
 
-
-## 
 

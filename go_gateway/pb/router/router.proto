@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package router;
+option go_package = ".;pb";
+
+// http路由
+message HttpRouter {
+  optional uint32 id = 1;                  // 路由ID
+  repeated string host = 4;                // 请求host
+  repeated string method = 5;              // 请求方式 GET、POST、PUT、PATCH、DELETE、HEAD、OPTIONS
+  optional string location = 6;            // 客户端请求路径
+  repeated Rule rules = 7;                 // 参数类型 header、query、cookie
+  optional uint32 retry = 8;               // 超时重试次数
+  optional uint32 time_out = 9;            // 超时时间，当为0时不设置超时，单位：ms
+  optional string plugin_names = 10;       // 插件列表
+  optional uint32 plugin_template_id = 11; // 插件模版ID
+  optional uint32 service_id = 12;         // 服务ID
+  optional bool disable = 13;              // 是否禁用路由 0-生效 1-禁用
+}
+
+// 规则 规则
+message Rule {
+  optional string type = 1;
+  optional string name = 2;
+  optional string value = 3;
+}

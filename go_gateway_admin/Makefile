@@ -33,14 +33,6 @@ config:
  	       --go_out=paths=source_relative:./internal \
 	       $(INTERNAL_PROTO_FILES)
 
-
-.PHONY: ent
-# generate ent
-ent:
-	go generate ./internal/data/ent
-
-
-
 .PHONY: api
 # generate api proto
 api:
