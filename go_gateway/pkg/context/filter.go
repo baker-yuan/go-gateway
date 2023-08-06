@@ -1,22 +1,14 @@
 package context
 
-import (
-	"github.com/baker-yuan/go-gateway/pkg/util"
-)
-
-var (
-	FilterSkillName = util.TypeNameOf((*IFilter)(nil))
-)
-
 // IChain 拦击器链
 type IChain interface {
 	DoChain(ctx GatewayContext) error // 放行，执行下一个拦截器
 	Destroy()                         // 销毁
 }
 
-// IChainPro 拦击器链升级版本
+// IChainPro 拦击器链升级版本，可以追加拦击器到拦击器链末尾
 type IChainPro interface {
-	Chain(ctx GatewayContext, append ...IFilter) error //
+	Chain(ctx GatewayContext, append ...IFilter) error // 放行，执行下一个拦截器
 	Destroy()                                          // 销毁
 }
 
@@ -44,8 +36,8 @@ func (fs Filters) Destroy() {
 	}
 }
 
-func DoChain(ctx GatewayContext, orgfilter Filters, append ...IFilter) error {
-	fs := orgfilter
+func DoChain(ctx GatewayContext, orgFilter Filters, append ...IFilter) error {
+	fs := orgFilter
 	fl := len(fs)
 	al := len(append)
 	if fl == 0 && al == 0 {

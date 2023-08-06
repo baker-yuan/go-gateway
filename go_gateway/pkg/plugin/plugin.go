@@ -11,3 +11,10 @@ type PluginSchema struct {
 // IPluginInstance 插件接口
 type IPluginInstance interface {
 }
+
+// IPluginManager 插件管理器
+// type IPluginManager interface {
+// 	CreateRequest(id string, conf map[string]*router_pb.Plugin) gcontext.IChainPro // 获取插件
+// 	Global() gcontext.IChainPro                                                    // 获取全局插件
+// 	GetConfigType(name string) (reflect.Type, bool)                                // 配置
+// }

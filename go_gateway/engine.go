@@ -5,20 +5,20 @@ import (
 	"net"
 
 	"github.com/baker-yuan/go-gateway/pkg/config"
-	"github.com/baker-yuan/go-gateway/plugin"
+	plugin_manager "github.com/baker-yuan/go-gateway/plugin"
 	http_router "github.com/baker-yuan/go-gateway/router/http"
-	"github.com/baker-yuan/go-gateway/service"
+	service_manager "github.com/baker-yuan/go-gateway/service"
 	"github.com/valyala/fasthttp"
 )
 
 // Engine 网关引擎
 type Engine struct {
 	config         *config.GatewayConfig
-	pluginManager  plugin.PluginManager
-	serviceManager service.ServiceManager
+	pluginManager  plugin_manager.IPluginManager
+	serviceManager service_manager.IServiceManager
 
 	// 接收http请求
-	httpRouteManager http_router.RouterManager
+	httpRouteManager http_router.IRouterManager
 	httpServer       *fasthttp.Server
 }
 
@@ -34,13 +34,15 @@ func New() (*Engine, error) {
 	engine.config = conf
 
 	// 初始化插件管理器
-	engine.pluginManager = plugin.NewPluginManager()
+	pluginManager := plugin_manager.NewPluginManager()
+	engine.pluginManager = pluginManager
 
 	// 初始化服务管理器
-	engine.serviceManager = service.NewServiceManager()
+	serviceManager := service_manager.NewServiceManager()
+	engine.serviceManager = serviceManager
 
 	// 初始化http路由管理器
-	engine.httpRouteManager = http_router.NewRouterManager()
+	engine.httpRouteManager = http_router.NewRouterManager(pluginManager, serviceManager)
 
 	// 初始化http服务器
 	httpServe := &fasthttp.Server{

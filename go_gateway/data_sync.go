@@ -5,7 +5,7 @@ import (
 	"time"
 
 	pb "github.com/baker-yuan/go-gateway/pb/router"
-	util2 "github.com/baker-yuan/go-gateway/pkg/util"
+	"github.com/baker-yuan/go-gateway/pkg/util"
 	"go.etcd.io/etcd/api/v3/mvccpb"
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
@@ -51,7 +51,7 @@ func (e *Engine) syncHttpRouter(kv clientv3.KV, watcher clientv3.Watcher) {
 		return
 	}
 	for _, kvpair := range value.Kvs {
-		router, err := util2.Unmarshal[pb.HttpRouter](kvpair.Value)
+		router, err := util.Unmarshal[pb.HttpRouter](kvpair.Value)
 		if err != nil {
 			continue
 		}
@@ -64,13 +64,13 @@ func (e *Engine) syncHttpRouter(kv clientv3.KV, watcher clientv3.Watcher) {
 		for _, event := range watchResp.Events {
 			switch event.Type {
 			case mvccpb.PUT: // 数据保存修改
-				router, err := util2.Unmarshal[pb.HttpRouter](event.Kv.Value)
+				router, err := util.Unmarshal[pb.HttpRouter](event.Kv.Value)
 				if err != nil {
 					continue
 				}
 				e.httpRouteManager.Set(&router, e.serviceManager)
 			case mvccpb.DELETE: // 数据删除
-				e.httpRouteManager.Delete(util2.StrToUint32Def0(string(event.Kv.Value)))
+				e.httpRouteManager.Delete(util.StrToUint32Def0(string(event.Kv.Value)))
 			}
 		}
 	}

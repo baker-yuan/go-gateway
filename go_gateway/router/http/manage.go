@@ -1,22 +1,24 @@
-package http_router
+package router_manager
 
 import (
 	"time"
 
 	pb "github.com/baker-yuan/go-gateway/pb/router"
+	gocontext "github.com/baker-yuan/go-gateway/pkg/context"
 	http_context "github.com/baker-yuan/go-gateway/pkg/context/http-context/impl"
 	"github.com/baker-yuan/go-gateway/pkg/router"
 	pkg_router "github.com/baker-yuan/go-gateway/pkg/router"
 	http_router "github.com/baker-yuan/go-gateway/pkg/router/http-router"
-	"github.com/baker-yuan/go-gateway/service"
+	plugin_manager "github.com/baker-yuan/go-gateway/plugin"
+	service_manager "github.com/baker-yuan/go-gateway/service"
 	"github.com/valyala/fasthttp"
 )
 
-// RouterManager 路由管理器统一接口
-type RouterManager interface {
-	Set(router *pb.HttpRouter, serviceManager service.ServiceManager) // 设置路由
-	Delete(id uint32)                                                 // 删除路由
-	FastHandler(ctx *fasthttp.RequestCtx)                             // 处理http请求
+// IRouterManager 路由管理器统一接口
+type IRouterManager interface {
+	Set(router *pb.HttpRouter, serviceManager service_manager.IServiceManager) // 设置路由
+	Delete(id uint32)                                                          // 删除路由
+	FastHandler(ctx *fasthttp.RequestCtx)                                      // 处理http请求
 }
 
 var (
@@ -33,20 +35,25 @@ type Router struct {
 	HttpHandler router.IRouterHandler   // 处理请求
 }
 
-type RouterManagerImpl struct {
+type RouterManager struct {
 	origin  map[uint32]*pb.HttpRouter
 	router  map[uint32]*Router
 	matcher router.IMatcher
+
+	pluginManager  plugin_manager.IPluginManager
+	serviceManager service_manager.IServiceManager
 }
 
-func NewRouterManager() RouterManager {
-	return &RouterManagerImpl{
-		origin: make(map[uint32]*pb.HttpRouter, 0),
-		router: make(map[uint32]*Router, 0),
+func NewRouterManager(pluginManager plugin_manager.IPluginManager, serviceManager service_manager.IServiceManager) IRouterManager {
+	return &RouterManager{
+		origin:         make(map[uint32]*pb.HttpRouter, 0),
+		router:         make(map[uint32]*Router, 0),
+		pluginManager:  pluginManager,
+		serviceManager: serviceManager,
 	}
 }
 
-func (m *RouterManagerImpl) Set(router *pb.HttpRouter, serviceManager service.ServiceManager) {
+func (m *RouterManager) Set(router *pb.HttpRouter, serviceManager service_manager.IServiceManager) {
 	// 一个路由一个httpHandler，用于串联http请求执行
 	handler := &httpHandler{
 		routerID:  router.GetId(),
@@ -57,9 +64,17 @@ func (m *RouterManagerImpl) Set(router *pb.HttpRouter, serviceManager service.Se
 		timeout:   time.Duration(router.GetTimeOut()) * time.Millisecond,
 	}
 
+	// 路由设置
+	var plugins gocontext.IChainPro
 	if !router.GetDisable() {
-
+		if router.PluginTemplateId != nil {
+		} else {
+			plugins = m.pluginManager.CreateRequest(router.Plugins)
+		}
 	}
+	handler.filters = plugins
+
+	// 服务设置
 
 	// 精细化匹配规则
 	appendRule := make([]pkg_router.AppendRule, 0, len(router.GetRules()))
@@ -85,13 +100,13 @@ func (m *RouterManagerImpl) Set(router *pb.HttpRouter, serviceManager service.Se
 	m.matcher, _ = m.Parse()
 }
 
-func (m RouterManagerImpl) Delete(id uint32) {
+func (m RouterManager) Delete(id uint32) {
 
 }
 
-func (rs *RouterManagerImpl) Parse() (router.IMatcher, error) {
+func (m *RouterManager) Parse() (router.IMatcher, error) {
 	root := http_router.NewRoot()
-	for _, v := range rs.router {
+	for _, v := range m.router {
 		err := root.Add(v.ID, v.HttpHandler, defaultPort, v.Hosts, v.Method, v.Path, v.Appends)
 		if err != nil {
 			return nil, err
@@ -100,7 +115,7 @@ func (rs *RouterManagerImpl) Parse() (router.IMatcher, error) {
 	return root.Build(), nil
 }
 
-func (m RouterManagerImpl) FastHandler(ctx *fasthttp.RequestCtx) {
+func (m RouterManager) FastHandler(ctx *fasthttp.RequestCtx) {
 	httpContext := http_context.NewContext(ctx, defaultPort)
 	// if m.matcher == nil {
 	// 	httpContext.SetFinish(notFound)

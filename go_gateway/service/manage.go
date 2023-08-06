@@ -1,4 +1,4 @@
-package service
+package service_manager
 
 import (
 	gcontext "github.com/baker-yuan/go-gateway/pkg/context"
@@ -9,13 +9,13 @@ type IService interface {
 	gcontext.BalanceHandler // 负载均衡
 }
 
-// ServiceManager 服务管理器统一接口
-type ServiceManager interface {
+// IServiceManager 服务管理器统一接口
+type IServiceManager interface {
 }
 
-type ServiceManagerImpl struct {
+type ServiceManager struct {
 }
 
-func NewServiceManager() ServiceManager {
-	return &ServiceManagerImpl{}
+func NewServiceManager() IServiceManager {
+	return &ServiceManager{}
 }

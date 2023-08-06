@@ -1,22 +1,35 @@
-package plugin
+package plugin_manager
 
 import (
-	pgk_plugin "github.com/baker-yuan/go-gateway/pkg/plugin"
+	pb_router "github.com/baker-yuan/go-gateway/pb/router"
+	gcontext "github.com/baker-yuan/go-gateway/pkg/context"
+	pkg_plugin "github.com/baker-yuan/go-gateway/pkg/plugin"
 	"github.com/baker-yuan/go-gateway/plugin/demo"
 )
 
-// PluginManager 插件管理器统一接口
-type PluginManager interface {
-	RegisterSchema(plg *pgk_plugin.PluginSchema)
+// IPluginManager 插件管理器统一接口
+type IPluginManager interface {
+	RegisterSchema(plg *pkg_plugin.PluginSchema)                        // 注册插件定义
+	CreateRequest(conf map[string]*pb_router.Plugin) gcontext.IChainPro // 获取插件
 }
 
-type PluginManagerImpl struct {
-	models map[string]*pgk_plugin.PluginSchema // 插件定义 PluginModel#name -> PluginModel
+type PluginManager struct {
+	schemas map[string]*pkg_plugin.PluginSchema // 插件定义 PluginModel#name -> PluginModel
 }
 
-func NewPluginManager() PluginManager {
-	pluginManager := &PluginManagerImpl{
-		models: make(map[string]*pgk_plugin.PluginSchema),
+func (m *PluginManager) CreateRequest(conf map[string]*pb_router.Plugin) gcontext.IChainPro {
+	filters := make([]gcontext.IFilter, 0, len(conf))
+	// for schema := range m.schemas {
+	//
+	// }
+	filters = append(filters, demo.DemoPlugin{})
+
+	return NewPluginObj(filters, conf)
+}
+
+func NewPluginManager() IPluginManager {
+	pluginManager := &PluginManager{
+		schemas: make(map[string]*pkg_plugin.PluginSchema),
 	}
 
 	// 注册插件
@@ -26,6 +39,6 @@ func NewPluginManager() PluginManager {
 }
 
 // RegisterSchema 注册插件定义信息
-func (pm *PluginManagerImpl) RegisterSchema(plg *pgk_plugin.PluginSchema) {
-	pm.models[plg.Name] = plg
+func (m *PluginManager) RegisterSchema(plg *pkg_plugin.PluginSchema) {
+	m.schemas[plg.Name] = plg
 }
