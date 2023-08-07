@@ -9,7 +9,6 @@ import (
 	"github.com/baker-yuan/go-gateway/pkg/router"
 	pkg_router "github.com/baker-yuan/go-gateway/pkg/router"
 	http_router "github.com/baker-yuan/go-gateway/pkg/router/http-router"
-	plugin_manager "github.com/baker-yuan/go-gateway/plugin"
 	service_manager "github.com/baker-yuan/go-gateway/service"
 	"github.com/valyala/fasthttp"
 )
@@ -40,16 +39,14 @@ type RouterManager struct {
 	router  map[uint32]*Router
 	matcher router.IMatcher
 
-	pluginManager  plugin_manager.IPluginManager
-	serviceManager service_manager.IServiceManager
+	chainCreate gocontext.IChainCreate
 }
 
-func NewRouterManager(pluginManager plugin_manager.IPluginManager, serviceManager service_manager.IServiceManager) IRouterManager {
+func NewRouterManager(chainCreate gocontext.IChainCreate) IRouterManager {
 	return &RouterManager{
-		origin:         make(map[uint32]*pb.HttpRouter, 0),
-		router:         make(map[uint32]*Router, 0),
-		pluginManager:  pluginManager,
-		serviceManager: serviceManager,
+		origin:      make(map[uint32]*pb.HttpRouter, 0),
+		router:      make(map[uint32]*Router, 0),
+		chainCreate: chainCreate,
 	}
 }
 
@@ -69,7 +66,7 @@ func (m *RouterManager) Set(router *pb.HttpRouter, serviceManager service_manage
 	if !router.GetDisable() {
 		if router.PluginTemplateId != nil {
 		} else {
-			plugins = m.pluginManager.CreateRequest(router.Plugins)
+			plugins = m.chainCreate.CreateChain(router.Plugins)
 		}
 	}
 	handler.filters = plugins

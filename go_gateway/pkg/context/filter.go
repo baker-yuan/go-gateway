@@ -1,5 +1,9 @@
 package context
 
+import (
+	pb_router "github.com/baker-yuan/go-gateway/pb/router"
+)
+
 // IChain 拦击器链
 type IChain interface {
 	DoChain(ctx GatewayContext) error // 放行，执行下一个拦截器
@@ -70,4 +74,9 @@ func (c *_FilterChain) Destroy() {
 
 func ToFilter(chain IChain) IFilter {
 	return &_FilterChain{chain: chain}
+}
+
+// IChainCreate 拦截器链生成
+type IChainCreate interface {
+	CreateChain(conf map[string]*pb_router.Plugin) IChainPro // 获取插件
 }

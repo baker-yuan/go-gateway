@@ -9,15 +9,15 @@ import (
 
 // IPluginManager 插件管理器统一接口
 type IPluginManager interface {
-	RegisterSchema(plg *pkg_plugin.PluginSchema)                        // 注册插件定义
-	CreateRequest(conf map[string]*pb_router.Plugin) gcontext.IChainPro // 获取插件
+	gcontext.IChainCreate
+	RegisterSchema(plg *pkg_plugin.PluginSchema) // 注册插件定义
 }
 
 type PluginManager struct {
 	schemas map[string]*pkg_plugin.PluginSchema // 插件定义 PluginModel#name -> PluginModel
 }
 
-func (m *PluginManager) CreateRequest(conf map[string]*pb_router.Plugin) gcontext.IChainPro {
+func (m *PluginManager) CreateChain(conf map[string]*pb_router.Plugin) gcontext.IChainPro {
 	filters := make([]gcontext.IFilter, 0, len(conf))
 	// for schema := range m.schemas {
 	//
