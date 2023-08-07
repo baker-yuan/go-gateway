@@ -23,9 +23,9 @@ type httpHandler struct {
 	retry           uint32                   // 超时重试次数
 	timeout         time.Duration            // 超时时间，当为0时不设置超时，单位：ms
 	service         service_manager.IService // 服务信息
-	filters         context.IChainPro        // 拦击器(插件)链
-	completeHandler context.CompleteHandler  //
-	finisher        context.FinishHandler    //
+	filters         context.IChainPro        // 拦击器链
+	completeHandler context.CompleteHandler  // 完成请求
+	finisher        context.FinishHandler    // 资源清理
 }
 
 func (h *httpHandler) ServeHTTP(ctx context.GatewayContext) {
@@ -53,9 +53,9 @@ func (h *httpHandler) ServeHTTP(ctx context.GatewayContext) {
 	ctx.SetLabel("path", httpContext.Request().URI().RequestURI())
 	ctx.SetLabel("ip", httpContext.Request().RealIp())
 
-	ctx.SetCompleteHandler(h.completeHandler) //
-	ctx.SetBalance(h.service)                 // 设置负载均衡
-	ctx.SetFinish(h.finisher)                 //
+	ctx.SetCompleteHandler(h.completeHandler)
+	ctx.SetBalance(h.service)
+	ctx.SetFinish(h.finisher)
 
 	// 执行拦截器链
 	_ = h.filters.Chain(ctx, completeCaller)

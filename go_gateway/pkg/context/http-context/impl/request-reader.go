@@ -9,7 +9,7 @@ import (
 
 var _ http_service.IRequestReader = (*RequestReader)(nil)
 
-// RequestReader 实现 go_gateway/context/http-context/context.go#IRequestReader
+// RequestReader 实现IRequestReader
 type RequestReader struct {
 	req        *fasthttp.Request
 	body       BodyRequestHandler
@@ -74,6 +74,10 @@ func (r *RequestReader) ContentType() string {
 
 // ---------------------------------------------------------------------------
 
+func (r *RequestReader) Request() *fasthttp.Request {
+	return r.req
+}
+
 func (r *RequestReader) Finish() error {
 	r.req = nil
 	r.body.reset(nil)
@@ -97,8 +101,4 @@ func (r *RequestReader) reset(req *fasthttp.Request, remoteAddr string) {
 	if length > 0 {
 		r.length = length
 	}
-}
-
-func (r *RequestReader) Request() *fasthttp.Request {
-	return r.req
 }

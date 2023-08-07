@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"time"
 
-	context2 "github.com/baker-yuan/go-gateway/pkg/context"
+	gcontext "github.com/baker-yuan/go-gateway/pkg/context"
 )
 
 type keyCloneCtx struct{}
@@ -28,10 +28,10 @@ type FileHeader struct {
 
 // IHttpContext http 扩展GatewayContext接口
 type IHttpContext interface {
-	context2.GatewayContext                                                     // 组合EoContext
+	gcontext.GatewayContext                                                     // 组合GatewayContext
 	Request() IRequestReader                                                    // 读取原始请求
 	Response() IResponse                                                        // 处理返回结果，可读可写
-	SendTo(scheme string, node context2.IInstance, timeout time.Duration) error // 如果下游是http服务，通过这个方法转发到下游
+	SendTo(scheme string, node gcontext.IInstance, timeout time.Duration) error // 如果下游是http服务，通过这个方法转发到下游
 	FastFinish()                                                                // 结束请求，释放资源
 
 	Proxy() IRequest   // 组装转发的request
@@ -80,9 +80,11 @@ type IBodySet interface {
 type IBodyDataReader interface {
 	// ContentType "Content-Type" 字段用于表示发送给接收者的实体主体的媒体类型。
 	ContentType() string
+
 	// BodyForm
 	// content-Type = application/x-www-form-urlencoded 或 multipart/form-data，与原生request.Form不同，这里不包括 query 参数
 	BodyForm() (url.Values, error)
+
 	// Files
 	// content-Type = multipart/form-data 时有效
 	Files() (map[string][]*multipart.FileHeader, error)

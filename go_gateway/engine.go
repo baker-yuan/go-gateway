@@ -44,7 +44,8 @@ func New() (*Engine, error) {
 	engine.serviceManager = serviceManager
 
 	// 初始化http路由管理器
-	engine.httpRouteManager = http_router.NewRouterManager(pluginManager)
+	httpRouteManager := http_router.NewRouterManager(pluginManager)
+	engine.httpRouteManager = httpRouteManager
 
 	// 初始化http服务器
 	httpServe := &fasthttp.Server{
@@ -53,7 +54,7 @@ func New() (*Engine, error) {
 		MaxRequestBodySize:           100 * 1024 * 1024,
 		ReadBufferSize:               16 * 1024,
 		Handler: func(ctx *fasthttp.RequestCtx) {
-			engine.httpRouteManager.FastHandler(ctx)
+			httpRouteManager.FastHandler(ctx)
 		}}
 	engine.httpServer = httpServe
 

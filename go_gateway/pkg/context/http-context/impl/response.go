@@ -11,11 +11,12 @@ import (
 
 var _ http_service.IResponse = (*Response)(nil)
 
-// Response
-// go_gateway/context/http-context/context.go#IBodyGet
-// go_gateway/context/http-context/context.go#IResponse
-// go_gateway/context/http-context/context.go#IResponseHeader
-// go_gateway/context/http-context/context.go#IBodySet
+// Response 处理返回结果
+// 实现接口
+// 1、IBodyGet
+// 2、IResponse
+// 3、IResponseHeader
+// 4、IBodySet
 type Response struct {
 	*fasthttp.Response
 	ResponseHeader

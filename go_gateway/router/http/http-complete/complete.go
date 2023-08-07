@@ -17,6 +17,7 @@ var (
 	ErrorTimeoutComplete = errors.New("complete timeout")
 )
 
+// HttpComplete 调用下游服务
 type HttpComplete struct {
 }
 
@@ -26,7 +27,6 @@ func NewHttpComplete() *HttpComplete {
 
 // Complete 发送http请求到下游服务
 func (h *HttpComplete) Complete(org context.GatewayContext) error {
-
 	ctx, err := http_service.Assert(org)
 	if err != nil {
 		return err
@@ -45,7 +45,6 @@ func (h *HttpComplete) Complete(org context.GatewayContext) error {
 	balance := ctx.GetBalance()
 
 	scheme := balance.Scheme()
-
 	switch strings.ToLower(scheme) {
 	case "", "tcp":
 		scheme = "http"
@@ -55,19 +54,20 @@ func (h *HttpComplete) Complete(org context.GatewayContext) error {
 	}
 	timeOut := balance.TimeOut()
 
+	// 重试
 	retryValue := ctx.Value(ctx_key.CtxKeyRetry)
 	retry, ok := retryValue.(int)
 	if !ok {
 		retry = router.DefaultRetry
 	}
-
+	// 请求超时
 	timeoutValue := ctx.Value(ctx_key.CtxKeyTimeout)
 	timeout, ok := timeoutValue.(time.Duration)
 	if !ok {
 		timeout = router.DefaultTimeout
 	}
-	var lastErr error
 
+	var lastErr error
 	for index := 0; index <= retry; index++ {
 		if timeout > 0 && time.Since(proxyTime) > timeout {
 			return ErrorTimeoutComplete
@@ -91,6 +91,7 @@ func (h *HttpComplete) Complete(org context.GatewayContext) error {
 	return lastErr
 }
 
+// NoServiceCompleteHandler 查找下游服务失败
 type NoServiceCompleteHandler struct {
 	status int
 	header map[string]string
@@ -124,17 +125,17 @@ func (n *NoServiceCompleteHandler) Complete(org context.GatewayContext) error {
 	return nil
 }
 
-type httpCompleteCaller struct {
+// HttpCompleteCaller 把调用下游请求的操作也封装为一个拦截器
+type HttpCompleteCaller struct {
 }
 
-func NewHttpCompleteCaller() *httpCompleteCaller {
-	return &httpCompleteCaller{}
+func NewHttpCompleteCaller() *HttpCompleteCaller {
+	return &HttpCompleteCaller{}
 }
 
-func (h *httpCompleteCaller) DoFilter(ctx context.GatewayContext, next context.IChain) (err error) {
+func (h *HttpCompleteCaller) DoFilter(ctx context.GatewayContext, next context.IChain) (err error) {
 	return ctx.GetComplete().Complete(ctx)
 }
 
-func (h *httpCompleteCaller) Destroy() {
-
+func (h *HttpCompleteCaller) Destroy() {
 }
