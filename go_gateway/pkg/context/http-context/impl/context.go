@@ -65,7 +65,7 @@ func NewContext(ctx *fasthttp.RequestCtx, port int) *HttpContext {
 	return httpContext
 }
 
-// -------------------- go_gateway/context/http-context/context.go#IHttpContext实现 --------------------
+// ------------------------------ /context/http-context/context.go#IHttpContext实现 ------------------------------ //
 
 func (ctx *HttpContext) Request() http_service.IRequestReader {
 	return &ctx.requestReader
@@ -126,14 +126,14 @@ func (ctx *HttpContext) FastFinish() {
 	ctx.completeHandler = nil
 	fasthttp.ReleaseRequest(ctx.requestReader.req)
 
-	ctx.requestReader.Finish()
-	ctx.proxyRequest.Finish()
-	ctx.response.Finish()
+	_ = ctx.requestReader.Finish()
+	_ = ctx.proxyRequest.Finish()
+	_ = ctx.response.Finish()
 	ctx.fastHttpRequestCtx = nil
 	pool.Put(ctx)
 }
 
-// -------------------- go_gateway/context/context.go#EoContext 实现 --------------------
+// ------------------------------ /context/context.go#GatewayContext实现 ------------------------------ //
 
 // RequestId 请求ID
 func (ctx *HttpContext) RequestId() string {

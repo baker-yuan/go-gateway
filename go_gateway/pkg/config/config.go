@@ -15,6 +15,7 @@ var (
 type GatewayConfig struct {
 	Proxy ProxyConfig `json:"proxy" yaml:"proxy"`
 	Sync  SyncConfig  `json:"sync" yaml:"sync"`
+	Admin AdminConfig `json:"admin" yaml:"admin"`
 }
 
 // ProxyConfig 转发服务配置
@@ -30,6 +31,11 @@ type SyncConfig struct {
 		Endpoints   []string `json:"endpoints" yaml:"endpoints"`       // 集群地址
 		DialTimeout uint32   `json:"dial_timeout" yaml:"dial_timeout"` // 连接超时
 	} `json:"etcd" yaml:"etcd"`
+}
+
+// AdminConfig 管理端配置
+type AdminConfig struct {
+	Addr string `json:"addr" yaml:"addr"` // 管理端地址
 }
 
 // Load 加载配置文件

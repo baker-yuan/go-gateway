@@ -1,8 +1,6 @@
 package context
 
-import (
-	pb_router "github.com/baker-yuan/go-gateway/pb/router"
-)
+import pb_router "github.com/baker-yuan/go-gateway/pb/router"
 
 // IChain 拦击器链
 type IChain interface {
@@ -78,5 +76,6 @@ func ToFilter(chain IChain) IFilter {
 
 // IChainCreate 拦截器链生成
 type IChainCreate interface {
-	CreateChain(conf map[string]*pb_router.Plugin) IChainPro // 获取插件
+	// CreateChain 获取插件
+	CreateChain(conf map[string]*pb_router.Plugin) IChainPro
 }

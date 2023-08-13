@@ -91,18 +91,22 @@ func (h *HttpComplete) Complete(org context.GatewayContext) error {
 	return lastErr
 }
 
-// NoServiceCompleteHandler 查找下游服务失败
-type NoServiceCompleteHandler struct {
+// FailCompleteHandler 返回失败信息
+type FailCompleteHandler struct {
 	status int
 	header map[string]string
 	body   string
 }
 
-func NewNoServiceCompleteHandler(status int, header map[string]string, body string) *NoServiceCompleteHandler {
-	return &NoServiceCompleteHandler{status: status, header: header, body: body}
+func NewFailCompleteHandler(status int, header map[string]string, body string) *FailCompleteHandler {
+	return &FailCompleteHandler{
+		status: status,
+		header: header,
+		body:   body,
+	}
 }
 
-func (n *NoServiceCompleteHandler) Complete(org context.GatewayContext) error {
+func (n *FailCompleteHandler) Complete(org context.GatewayContext) error {
 	ctx, err := http_service.Assert(org)
 	if err != nil {
 		return err

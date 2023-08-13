@@ -8,6 +8,7 @@ import (
 	"time"
 
 	gcontext "github.com/baker-yuan/go-gateway/pkg/context"
+	"github.com/valyala/fasthttp"
 )
 
 type keyCloneCtx struct{}
@@ -211,4 +212,8 @@ type IResponse interface {
 	ResponseTime() time.Duration            //
 	ContentLength() int                     //
 	ContentType() string                    //
+}
+
+type HandHttp interface {
+	FastHandler(ctx *fasthttp.RequestCtx)
 }

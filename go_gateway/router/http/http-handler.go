@@ -2,14 +2,13 @@ package router_manager
 
 import (
 	"fmt"
-	"net/http"
 	"time"
 
 	"github.com/baker-yuan/go-gateway/pkg/context"
 	http_context "github.com/baker-yuan/go-gateway/pkg/context/http-context"
 	"github.com/baker-yuan/go-gateway/pkg/model/ctx_key"
+	pkg_service "github.com/baker-yuan/go-gateway/pkg/service"
 	http_complete "github.com/baker-yuan/go-gateway/router/http/http-complete"
-	service_manager "github.com/baker-yuan/go-gateway/service"
 )
 
 // 发送http请求到下游服务
@@ -17,15 +16,15 @@ var completeCaller = http_complete.NewHttpCompleteCaller()
 
 // httpHandler 处理http请求，实现接口IRouterHandler，一个路由对应一个httpHandler
 type httpHandler struct {
-	routerID        uint32                   // 路由ID
-	serviceID       uint32                   // 服务ID
-	disable         bool                     // 是否禁用路由
-	retry           uint32                   // 超时重试次数
-	timeout         time.Duration            // 超时时间，当为0时不设置超时，单位：ms
-	service         service_manager.IService // 服务信息
-	filters         context.IChainPro        // 拦击器链
-	completeHandler context.CompleteHandler  // 完成请求
-	finisher        context.FinishHandler    // 资源清理
+	routerID        uint32                  // 路由ID
+	serviceID       uint32                  // 服务ID
+	disable         bool                    // 是否禁用路由
+	retry           uint32                  // 超时重试次数
+	timeout         time.Duration           // 超时时间，当为0时不设置超时，单位：ms
+	service         pkg_service.IService    // 服务信息
+	filters         context.IChainPro       // 拦击器链
+	completeHandler context.CompleteHandler // 完成请求
+	finisher        context.FinishHandler   // 资源清理
 }
 
 func (h *httpHandler) ServeHTTP(ctx context.GatewayContext) {
@@ -36,8 +35,7 @@ func (h *httpHandler) ServeHTTP(ctx context.GatewayContext) {
 
 	// 路由被禁用
 	if h.disable {
-		httpContext.Response().SetStatus(http.StatusNotFound, "")
-		httpContext.Response().SetBody([]byte(`{"code":"404","message":"router disable"}`))
+		_ = httpContext.GetComplete().Complete(ctx)
 		httpContext.FastFinish()
 		return
 	}

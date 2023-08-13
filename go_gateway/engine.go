@@ -44,7 +44,7 @@ func New() (*Engine, error) {
 	engine.serviceManager = serviceManager
 
 	// 初始化http路由管理器
-	httpRouteManager := http_router.NewRouterManager(pluginManager)
+	httpRouteManager := http_router.NewRouterManager(pluginManager, serviceManager)
 	engine.httpRouteManager = httpRouteManager
 
 	// 初始化http服务器

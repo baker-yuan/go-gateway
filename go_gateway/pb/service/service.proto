@@ -3,3 +3,7 @@ syntax = "proto3";
 package service;
 option go_package = ".;pb";
 
+// 服务
+message Service {
+
+}

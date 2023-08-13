@@ -9,10 +9,10 @@ import (
 
 var ErrEoCtxUnCloneable = errors.New("EoContext is UnCloneable. ")
 
-// CompleteHandler 完成请求操作
+// CompleteHandler 完成转发请求操作
 // 主要作用：
 // 1、转发到下游http、grpc、double服务
-// 2、路由失败返回路由失败异常
+// 2、路由失败，返回路由失败异常
 type CompleteHandler interface {
 	Complete(ctx GatewayContext) error
 }

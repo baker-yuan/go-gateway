@@ -50,12 +50,12 @@ func (e *Engine) syncHttpRouter(kv clientv3.KV, watcher clientv3.Watcher) {
 	if err != nil {
 		return
 	}
-	for _, kvpair := range value.Kvs {
-		router, err := util.Unmarshal[pb.HttpRouter](kvpair.Value)
+	for _, kvPair := range value.Kvs {
+		router, err := util.Unmarshal[pb.HttpRouter](kvPair.Value)
 		if err != nil {
 			continue
 		}
-		e.httpRouteManager.Set(&router, e.serviceManager)
+		e.httpRouteManager.Set(&router)
 	}
 
 	// 监听增量数据
@@ -68,7 +68,7 @@ func (e *Engine) syncHttpRouter(kv clientv3.KV, watcher clientv3.Watcher) {
 				if err != nil {
 					continue
 				}
-				e.httpRouteManager.Set(&router, e.serviceManager)
+				e.httpRouteManager.Set(&router)
 			case mvccpb.DELETE: // 数据删除
 				e.httpRouteManager.Delete(util.StrToUint32Def0(string(event.Kv.Value)))
 			}
